@@ -14,33 +14,33 @@ var vm = otto.New()
 func main() {
 	fi, err := os.Stdin.Stat()
 	if err != nil {
-		panic(err)
+		fatal(err)
 	}
-	if fi.Size() == 0 {
+	if fi.Mode()&os.ModeNamedPipe == 0 {
 		usage()
 		os.Exit(1)
 	}
 
 	buf, err := ioutil.ReadAll(os.Stdin)
 	if err != nil {
-		panic(err)
+		fatal(err)
 	}
 	var input interface{}
 	if err := json.Unmarshal(buf, &input); err != nil {
-		panic(err)
+		fatal(err)
 	}
 
 	if err := vm.Set("json", input); err != nil {
-		panic(err)
+		fatal(err)
 	}
 	value, err := vm.Get("json")
 	if err != nil {
-		panic(err)
+		fatal(err)
 	}
 	for _, code := range os.Args[1:] {
 		value, err = reduce(value, code)
 		if err != nil {
-			panic(err)
+			fatal(err)
 		}
 	}
 
@@ -51,18 +51,18 @@ func main() {
 
 	i, err := value.Export()
 	if err != nil {
-		panic(err)
+		fatal(err)
 	}
 	s, err := prettyjson.Marshal(i)
 	if err != nil {
-		panic(err)
+		fatal(err)
 	}
 	fmt.Println(string(s))
 }
 
 func reduce(value otto.Value, code string) (otto.Value, error) {
 	if err := vm.Set("json", value); err != nil {
-		panic(err)
+		fatal(err)
 	}
 	switch code {
 	case "?":
@@ -93,4 +93,9 @@ func usage() {
     "two"
 
 `)
+}
+
+func fatal(err error) {
+	fmt.Fprintln(os.Stderr, err)
+	os.Exit(1)
 }

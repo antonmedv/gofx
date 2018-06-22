@@ -1,0 +1,12 @@
+language: go
+go:
+  - "1.10"
+install:
+  - make install
+script:
+  - "echo '{\"key\":\"value\"}' | go run main.go"
+  - "echo '{\"foo\": [{\"bar\": \"value\"}]}' | go run main.go 'this.foo[0].bar'"
+  - "echo '{\"foo\": [{\"bar\": \"value\"}]}' | go run main.go 'this.foo' 'this[0]' 'this.bar'"
+  - "echo '[]' | go run main.go 'void 0'"
+  - "echo '{\"foo\": 1, \"bar\": 2}' | go run main.go 'Object.keys(this)'"
+  - "echo '{\"foo\": 1, \"bar\": 2}' | go run main.go ?"
