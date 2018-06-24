@@ -7,7 +7,7 @@
 ## Features
 
 * Don't need to learn new syntax
-* Plain JavaScript
+* Written in Go
 * Formatting and highlighting
 
 ## Differences
