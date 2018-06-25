@@ -3,10 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/hokaccha/go-prettyjson"
-	"github.com/robertkrimen/otto"
 	"io/ioutil"
 	"os"
+
+	"github.com/hokaccha/go-prettyjson"
+	"github.com/mattn/go-colorable"
+	"github.com/robertkrimen/otto"
 )
 
 var vm = otto.New()
@@ -57,7 +59,7 @@ func main() {
 	if err != nil {
 		fatal(err)
 	}
-	fmt.Println(string(s))
+	fmt.Fprintln(colorable.NewColorableStdout(), string(s))
 }
 
 func reduce(value otto.Value, code string) (otto.Value, error) {
