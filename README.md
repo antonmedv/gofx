@@ -45,7 +45,7 @@ $ echo '{"key":"value"}' | xx
 You can get access to JSON by `this` keyword:
 ```
 $ echo '{"foo": [{"bar": "value"}]}' | xx 'this.foo[0].bar'
-"value"
+value
 ```
 
 ### Chain
@@ -53,7 +53,7 @@ $ echo '{"foo": [{"bar": "value"}]}' | xx 'this.foo[0].bar'
 You can pass any number of code blocks for reducing JSON:
 ```
 $ echo '{"foo": [{"bar": "value"}]}' | xx 'this.foo' 'this[0]' 'this.bar'
-"value"
+value
 ```
 
 ### Formatting
@@ -98,6 +98,15 @@ By the way, xx has shortcut for `Object.keys(this)`. Previous example can be rew
 ```
 $ echo '{"foo": 1, "bar": 2}' | xx ?
 ``` 
+
+### Dot
+
+It is possible to omit `this` keyword:
+
+```
+$ echo '{"foo": "bar"}' | xx .foo[0].bar
+value
+```
 
 ## Related
 

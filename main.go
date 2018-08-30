@@ -51,6 +51,11 @@ func main() {
 		return
 	}
 
+	if value.IsString() {
+		fmt.Println(value)
+		return
+	}
+
 	i, err := value.Export()
 	if err != nil {
 		fatal(err)
@@ -66,9 +71,13 @@ func reduce(value otto.Value, code string) (otto.Value, error) {
 	if err := vm.Set("json", value); err != nil {
 		fatal(err)
 	}
-	switch code {
-	case "?":
+	switch {
+	case code == "?":
 		code = "Object.keys(json)"
+	case code == ".":
+		code = "(function () {return this;}).call(json)"
+	case len(code) > 1 && code[0] == '.':
+		code = fmt.Sprintf(`(function () {return this%v;}).call(json)`, code)
 	default:
 		code = fmt.Sprintf(`(function () {return %v;}).call(json)`, code)
 	}
@@ -81,6 +90,8 @@ func reduce(value otto.Value, code string) (otto.Value, error) {
 
 func usage() {
 	fmt.Fprintf(os.Stderr, `
+  Command-line JSON processing tool
+
   Usage
     $ xx [code ...]
 
@@ -93,6 +104,12 @@ func usage() {
 
     $ echo '{"items": ["one", "two"]}' | xx 'this.items' 'this[1]'
     "two"
+
+    $ echo '{"foo": 1, "bar": 2}' | xx ?
+    ["foo", "bar"]
+    
+    $ echo '{"key": "value"}' | xx .key
+    value
 
 `)
 }
