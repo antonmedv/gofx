@@ -48,6 +48,15 @@ $ echo '{"foo": [{"bar": "value"}]}' | xx 'this.foo[0].bar'
 value
 ```
 
+### Dot
+
+It is possible to omit `this` keyword:
+
+```
+$ echo '{"foo": [{"bar": "value"}]}' | xx .foo[0].bar
+value
+```
+
 ### Chain
 
 You can pass any number of code blocks for reducing JSON:
@@ -98,15 +107,6 @@ By the way, xx has shortcut for `Object.keys(this)`. Previous example can be rew
 ```
 $ echo '{"foo": 1, "bar": 2}' | xx ?
 ``` 
-
-### Dot
-
-It is possible to omit `this` keyword:
-
-```
-$ echo '{"foo": "bar"}' | xx .foo[0].bar
-value
-```
 
 ## Related
 
