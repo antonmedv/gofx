@@ -1,8 +1,6 @@
-<img src="https://user-images.githubusercontent.com/141232/41759457-dbfb230a-7618-11e8-9159-03aa62e57152.png" height="100" alt="fx">
-
-# [![Build Status](https://travis-ci.org/antonmedv/xx.svg?branch=master)](https://travis-ci.org/antonmedv/xx)
+# gofx [![Build Status](https://travis-ci.org/antonmedv/gofx.svg?branch=master)](https://travis-ci.org/antonmedv/gofx)
  
-[fx](https://github.com/antonmedv/fx)-like command-line JSON processing tool 
+[fx](https://github.com/antonmedv/fx)-like command-line JSON processing tool. This is implementation of some functionality of fx tool.
 
 ## Features
 
@@ -13,28 +11,28 @@
 ## Differences
 
 * Only ES5 (no arrow functions, no spread)
-* Small binary size (xx ~5mb vs fx ~30mb)
+* Small binary size
 * Can't use npm packages
 
 ## Install
 
 ```
-$ go get github.com/antonmedv/xx
+$ go get github.com/antonmedv/gofx
 ```
 
-Or download precompiled binary from [releases](https://github.com/antonmedv/xx/releases) page.
+Or download precompiled binary from [releases](https://github.com/antonmedv/gofx/releases) page.
 
 ## Usage
 
-Pipe into `xx` any JSON and JS code for reducing it.
+Pipe into `gofx` any JSON and JS code for reducing it.
 
 ```
-$ xx [code ...]
+$ gofx [code ...]
 ```
 
 Pretty print JSON without passing any arguments:
 ```
-$ echo '{"key":"value"}' | xx
+$ echo '{"key":"value"}' | gofx
 {
     "key": "value"
 }
@@ -44,7 +42,7 @@ $ echo '{"key":"value"}' | xx
 
 You can get access to JSON by `this` keyword:
 ```
-$ echo '{"foo": [{"bar": "value"}]}' | xx 'this.foo[0].bar'
+$ echo '{"foo": [{"bar": "value"}]}' | gofx 'this.foo[0].bar'
 value
 ```
 
@@ -53,7 +51,7 @@ value
 It is possible to omit `this` keyword:
 
 ```
-$ echo '{"foo": [{"bar": "value"}]}' | xx .foo[0].bar
+$ echo '{"foo": [{"bar": "value"}]}' | gofx .foo[0].bar
 value
 ```
 
@@ -61,7 +59,7 @@ value
 
 You can pass any number of code blocks for reducing JSON:
 ```
-$ echo '{"foo": [{"bar": "value"}]}' | xx 'this.foo' 'this[0]' 'this.bar'
+$ echo '{"foo": [{"bar": "value"}]}' | gofx 'this.foo' 'this[0]' 'this.bar'
 value
 ```
 
@@ -70,12 +68,12 @@ value
 If you need something different then JSON (for example arguments for xargs) do not return anything from reducer.
 `undefined` value printed into stderr by default.
 ```
-$ echo '[]' | xx 'void 0'
+$ echo '[]' | gofx 'void 0'
 undefined
 ```
 
 ```
-$ echo '[1,2,3]' | xx 'this.forEach(function (x) { console.log(x) })' 2>/dev/null | xargs echo
+$ echo '[1,2,3]' | gofx 'this.forEach(function (x) { console.log(x) })' 2>/dev/null | xargs echo
 1 2 3
 ```
 
@@ -84,7 +82,7 @@ $ echo '[1,2,3]' | xx 'this.forEach(function (x) { console.log(x) })' 2>/dev/nul
 To modify object use command separated by comma `,` and return `this` as the end.
 
 ```
-$ echo '{"a": 2}' | xx 'this["b"] = Math.pow(this.a, 10), this'
+$ echo '{"a": 2}' | gofx 'this["b"] = Math.pow(this.a, 10), this'
 {
   "a": 2,
   "b": 1024
@@ -95,17 +93,17 @@ $ echo '{"a": 2}' | xx 'this["b"] = Math.pow(this.a, 10), this'
 
 Get all object keys:
 ```
-$ echo '{"foo": 1, "bar": 2}' | xx 'Object.keys(this)'
+$ echo '{"foo": 1, "bar": 2}' | gofx 'Object.keys(this)'
 [
   "foo",
   "bar"
 ]
 ```
 
-By the way, xx has shortcut for `Object.keys(this)`. Previous example can be rewritten as:
+By the way, gofx has shortcut for `Object.keys(this)`. Previous example can be rewritten as:
 
 ```
-$ echo '{"foo": 1, "bar": 2}' | xx ?
+$ echo '{"foo": 1, "bar": 2}' | gofx ?
 ``` 
 
 ## Related
