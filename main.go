@@ -93,22 +93,22 @@ func usage() {
   Command-line JSON processing tool
 
   Usage
-    $ xx [code ...]
+    $ gofx [code ...]
 
   Examples
-    $ echo '{"key": "value"}' | xx 'this.key'
+    $ echo '{"key": "value"}' | gofx 'this.key'
     "value"
 
-    $ echo '[1,2,3]' | xx 'this.map(function (x) { return x * 2; })'
+    $ echo '[1,2,3]' | gofx 'this.map(function (x) { return x * 2; })'
     [2, 4, 6]
 
-    $ echo '{"items": ["one", "two"]}' | xx 'this.items' 'this[1]'
+    $ echo '{"items": ["one", "two"]}' | gofx 'this.items' 'this[1]'
     "two"
 
-    $ echo '{"foo": 1, "bar": 2}' | xx ?
+    $ echo '{"foo": 1, "bar": 2}' | gofx ?
     ["foo", "bar"]
     
-    $ echo '{"key": "value"}' | xx .key
+    $ echo '{"key": "value"}' | gofx .key
     value
 
 `)
